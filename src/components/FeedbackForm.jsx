@@ -1,15 +1,16 @@
-import React from 'react'
+import { React, useState, useContext, useEffect } from 'react'
 import Card from './shared/Card'
-import { useState } from 'react'
 import Button from './shared/Button'
 import RatingSelect from './RatingSelect'
+import FeedbackContext from '../context/FeedbackContext'
 
-function FeedbackForm({handleAdd}) {
+function FeedbackForm() {
     const [text, setText] = useState('')
     const [rating, setRating] = useState(5)
     const [btnDisabled, setbtnDisabled] = useState(true)
     const [message, setMessage] = useState('')
 
+    const {addFeedback, updateFeedback, feedbackEdit} = useContext(FeedbackContext)
     const handleTextChange = (e) =>{
         if(text === ''){
             setbtnDisabled(true)
@@ -23,7 +24,13 @@ function FeedbackForm({handleAdd}) {
         }
         setText(e.target.value)
     }
-
+    useEffect(()=>{
+        if(feedbackEdit.edit === true){
+            setbtnDisabled(false)
+            setText(feedbackEdit.item.text)
+            setRating(feedbackEdit.item.rating)
+        }
+    }, [feedbackEdit])
     const handleSubmit = (e) =>{
         e.preventDefault()
         if(text.trim().length > 10){
@@ -31,7 +38,12 @@ function FeedbackForm({handleAdd}) {
                 text: text,
                 rating: rating
             }
-            handleAdd(newFeedback)
+            if(feedbackEdit.edit === true){
+                updateFeedback(feedbackEdit.item.id, newFeedback)
+            } else{
+                addFeedback(newFeedback)
+            }
+            
         }
     }
   return (
