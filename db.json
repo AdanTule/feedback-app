@@ -14,6 +14,11 @@
       "id": 3,
       "rating": 10,
       "text": "this is feeback item 3 coming from backend"
+    },
+    {
+      "text": "This is an updated item 8",
+      "rating": 3,
+      "id": 4
     }
   ]
 }
